@@ -32,9 +32,9 @@ This project is meant for local development and education only — it is NOT int
 
    cp creds.env.example creds.env
 
-   - PROJECT_UUID: project id from your BrownieGate instance
+   - PROJECT_UUID: project id from your BrownieGate project
    - API_KEY: API key for your project
-   - ENCRYPTION_KEY: Fernet key (32 urlsafe base64 bytes):  From your brownieGate instance
+   - ENCRYPTION_KEY: Fernet key (32 urlsafe base64 bytes):  From your brownieGate project
    - FLASK_SECRET_KEY: random hex or token for Flask sessions (generate with: `python -c "import secrets; print(secrets.token_hex(32))"`)
    - COOKIE_SECURE / SESSION_COOKIE_SECURE: use `0` for localhost, `1` for HTTPS
    - COOKIE_SAMESITE: Lax (recommended)

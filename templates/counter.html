@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Counter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/counter.css') }}">
+</head>
+<body>
+    <div class="container">
+        <img id="pfp" alt="Profile pic" src="{{ url_for('static', filename='resources/loading.gif') }}">
+        <h1>Hello, {{ session['username'] }}</h1>
+        <div class="counter-container">
+            <p id="counter">You have pressed the button: 0 times!</p>
+            <button onclick="countPressed()">Click</button>
+        </div>
+        <button onclick="logout()">Logout</button>
+    </div>
+</body>
+<script src="{{ url_for('static', filename='js/brownieGateFunctions.js') }}"></script>
+<script>
+    let count = {{ session.get('score') | default(0) }};
+
+    loadCount();
+
+    function loadCount() {
+        document.getElementById('counter').innerHTML = `You have pressed the button: ${count} times!`;
+    }
+
+    function countPressed() {
+        count += 1;
+        document.getElementById('counter').innerHTML = `You have pressed the button: ${count} times!`;
+
+        fetch('/update_count', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ score: count })
+        })
+        .then(response => response.json())
+        .then(data => console.log('Backend response:', data))
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+</html>

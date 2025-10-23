@@ -5,28 +5,24 @@ from dotenv import load_dotenv
 import sqlite3
 
 app = Flask(__name__)
-app.secret_key = "secretKeyHere"
-app.config.update(SESSION_COOKIE_SECURE=True)
 
 load_dotenv(dotenv_path="creds.env")
 PROJECT_UUID = os.getenv('PROJECT_UUID')
 API_KEY = os.getenv('API_KEY')
 ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY')
 BROWNIE_GATE_URL = 'http://10.8.0.3:5000' 
+app.secret_key = os.getenv('FLASK_SECRET_KEY')
 
-try:
-    connection_obj = sqlite3.connect('data.db')
-    cursor_obj = connection_obj.cursor()
-    table_creation_query = """
-        CREATE TABLE data (
-            user_id VARCHAR(255) NOT NULL,
-            score INT
-        );
-    """
-    cursor_obj.execute(table_creation_query)
-    connection_obj.close()
-except:
-    pass
+connection_obj = sqlite3.connect('data.db')
+cursor_obj = connection_obj.cursor()
+table_creation_query = """
+    CREATE TABLE IF NOT EXISTS data(
+        user_id VARCHAR(255) NOT NULL,
+        score INT
+    );
+"""
+cursor_obj.execute(table_creation_query)
+connection_obj.close()
 
 gate = brownieGate(api_key=API_KEY, project_uuid=PROJECT_UUID, encryption_key=ENCRYPTION_KEY, url=BROWNIE_GATE_URL, debug=True)
 
@@ -143,4 +139,4 @@ def get_pfp():
         return {'success': False}
 
 if __name__ == "__main__":
-    app.run(debug=True, host="site.localhost", port=5000)
+    app.run(debug=True, host="localhost", port=5000)

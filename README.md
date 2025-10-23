@@ -85,13 +85,6 @@ python app.py
 | SESSION_COOKIE_SECURE | 0 or 1 |
 
 How to generate keys locally:
-- Fernet key (32 bytes base64):
-```bash
-python - <<'PY'
-import secrets, base64
-print(base64.urlsafe_b64encode(secrets.token_bytes(32)).decode())
-PY
-```
 - Flask secret:
 ```bash
 python -c "import secrets; print(secrets.token_hex(32))"

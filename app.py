@@ -14,7 +14,7 @@ PROJECT_UUID = os.getenv('PROJECT_UUID', '')
 API_KEY = os.getenv('API_KEY', '')
 ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY', '')
 # Make the BrownieGate URL configurable for local testing
-BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'http://10.8.0.3:5000')
+BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'https://browniegate.xyz')
 
 # App secret key for Flask sessions (do NOT commit real secrets)
 FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
@@ -103,12 +103,45 @@ def root():
 @app.route("/login")
 def login():
     """
-    Simple login page. If the user already has a session or an auth cookie,
-    redirect to the protected counter page. Otherwise show the example login button.
+    Login page:
+    - If a server-side session exists -> redirect to /counter
+    - If an 'auth' cookie exists -> try to decrypt & validate it, bootstrap session and redirect on success
+    - If cookie is invalid/unparseable -> delete cookie and render login page
+    - Otherwise render login page
     """
-    if session.get('user_id') or request.cookies.get('auth'):
+    # 1) If session already present, go directly to protected page
+    if session.get('user_id'):
         return redirect(url_for('counter'))
-    # Link to the BrownieGate auth endpoint; developers can click this to start the demo flow
+
+    # 2) If an auth cookie exists, validate it before redirecting
+    token = request.cookies.get('auth')
+    if token:
+        try:
+            user_id, cookie_hash = gate.decrypt_cookie(token)
+        except Exception:
+            # Cookie is malformed / cannot be decrypted -> remove cookie and show login
+            resp = make_response(render_template("login.html", brownie_gate_url=f'{BROWNIE_GATE_URL}/gate/auth?project_uuid={PROJECT_UUID}'))
+            resp.delete_cookie('auth')
+            return resp
+
+        # If decrypt succeeded, validate with BrownieGate
+        try:
+            if gate.validate_cookie(user_id, cookie_hash):
+                # Valid cookie -> populate session and continue
+                setup_user_session(user_id)
+                return redirect(url_for('counter'))
+            else:
+                # Invalid/expired cookie -> delete and show login
+                resp = make_response(render_template("login.html", brownie_gate_url=f'{BROWNIE_GATE_URL}/gate/auth?project_uuid={PROJECT_UUID}'))
+                resp.delete_cookie('auth')
+                return resp
+        except Exception:
+            # If validation call fails (network/Gate error), prefer showing login and removing cookie
+            resp = make_response(render_template("login.html", brownie_gate_url=f'{BROWNIE_GATE_URL}/gate/auth?project_uuid={PROJECT_UUID}'))
+            resp.delete_cookie('auth')
+            return resp
+
+    # 3) No session and no cookie -> render login link
     return render_template("login.html", brownie_gate_url=f'{BROWNIE_GATE_URL}/gate/auth?project_uuid={PROJECT_UUID}')
 
 @app.route("/auth/callback")
@@ -267,4 +300,4 @@ def health():
 
 if __name__ == "__main__":
     # Local development: debug True is convenient. Don't use debug=True on public servers.
-    app.run(debug=True, host="localhost", port=5000)
+    app.run(debug=True, host="site.localhost", port=5000)

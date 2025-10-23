@@ -34,13 +34,7 @@ This project is meant for local development and education only — it is NOT int
 
    - PROJECT_UUID: project id from your BrownieGate instance
    - API_KEY: API key for your project
-   - ENCRYPTION_KEY: Fernet key (32 urlsafe base64 bytes). Generate with:
-     ```bash
-     python - <<'PY'
-     import secrets, base64
-     print(base64.urlsafe_b64encode(secrets.token_bytes(32)).decode())
-     PY
-     ```
+   - ENCRYPTION_KEY: Fernet key (32 urlsafe base64 bytes):  From your brownieGate instance
    - FLASK_SECRET_KEY: random hex or token for Flask sessions (generate with: `python -c "import secrets; print(secrets.token_hex(32))"`)
    - COOKIE_SECURE / SESSION_COOKIE_SECURE: use `0` for localhost, `1` for HTTPS
    - COOKIE_SAMESITE: Lax (recommended)

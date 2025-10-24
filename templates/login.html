@@ -1,19 +1,37 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Login</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
-    <div class="login-container">
+	<div class="login-container" role="main" aria-labelledby="login-title">
+		<h1 id="login-title">Sign in with BrownieGate</h1>
 
-        <h1>Login</h1>
+		<p>
+			<button id="bg-login-btn" aria-label="Login with BrownieGate">Login with BrownieGate</button>
+		</p>
 
-        <a href="{{ brownie_gate_url }}">
-            <button type="button" style="background-color:#10b981; margin-bottom: 5px; width: 100%;">Login with BrownieGate</button>
-        </a>
+		<p id="bg-info" style="margin-top:16px; color: #cbd5e1; font-size:0.95rem;">
+			A popup will open to sign in. If the popup is blocked, you'll be redirected instead.
+		</p>
+	</div>
 
-    </div>
+	<!--
+		Small inline config object provided by Jinja2.
+		This keeps the main JS file static while allowing server-rendered values to be injected.
+	-->
+	<script>
+		/* eslint-disable */
+		window.BG_CONFIG = {{ {
+			"authUrl": brownie_gate_url,
+			"popupFeatures": "width=500,height=700,menubar=no,toolbar=no,location=yes,resizable=yes,scrollbars=yes,status=no"
+		} | tojson }};
+		/* eslint-enable */
+	</script>
+
+	<script src="{{ url_for('static', filename='js/login.js') }}"></script>
 </body>
 </html>

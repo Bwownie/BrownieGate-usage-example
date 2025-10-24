@@ -15,8 +15,8 @@
         </div>
         <button onclick="logout()">Logout</button>
     </div>
+    <script src="{{ url_for('static', filename='js/brownieGateFunctions.js') }}"></script>
 </body>
-<script src="{{ url_for('static', filename='js/brownieGateFunctions.js') }}"></script>
 <script>
     let count = {{ session.get('score') | default(0) }};
 

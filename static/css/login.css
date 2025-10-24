@@ -1,3 +1,4 @@
+/* Styles for templates/login.html */
 body {
   background-color: #0f172a;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -38,4 +39,10 @@ button {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.25s ease;
+}
+
+button:hover,
+button:focus {
+  background-color: #2563eb;
+  outline: none;
 }

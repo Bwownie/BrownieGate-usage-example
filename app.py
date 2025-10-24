@@ -7,14 +7,14 @@ from pathlib import Path
 
 # Load local development environment variables from creds.env
 # See creds.env.example in the repo for required variables and example values.
-load_dotenv(dotenv_path="creds.env")
+load_dotenv(dotenv_path="test_creds.env")
 
 # Configuration from environment (developers should set these in creds.env)
 PROJECT_UUID = os.getenv('PROJECT_UUID', '')
 API_KEY = os.getenv('API_KEY', '')
 ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY', '')
 # Make the BrownieGate URL configurable for local testing
-BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'https://browniegate.xyz')
+BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'http://192.168.1.119:5000')
 
 # App secret key for Flask sessions (do NOT commit real secrets)
 FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
@@ -107,7 +107,7 @@ def login():
     - If a server-side session exists -> redirect to /counter
     - If an 'auth' cookie exists -> try to decrypt & validate it, bootstrap session and redirect on success
     - If cookie is invalid/unparseable -> delete cookie and render login page
-    - Otherwise render login page
+    - Otherwise render login page (the template includes popup JS)
     """
     # 1) If session already present, go directly to protected page
     if session.get('user_id'):
@@ -141,7 +141,7 @@ def login():
             resp.delete_cookie('auth')
             return resp
 
-    # 3) No session and no cookie -> render login link
+    # 3) No session and no cookie -> render login link (popup-enabled)
     return render_template("login.html", brownie_gate_url=f'{BROWNIE_GATE_URL}/gate/auth?project_uuid={PROJECT_UUID}')
 
 @app.route("/auth/callback")
@@ -153,6 +153,9 @@ def callback():
       - verify payload with gate.verify_payload()
       - generate a cookie and set it on the response
       - create example DB record and session
+    For the popup flow we return a small HTML page that posts a message to window.opener
+    and then closes the popup. The cookie is set on this response so the main window
+    (same origin) will have the cookie on subsequent requests.
     """
     payload = request.args.get("payload")
     if not payload:
@@ -172,8 +175,8 @@ def callback():
     token = gate.generate_cookie(user_id)
     token_str = token.decode() if isinstance(token, bytes) else str(token)
 
-    # Set cookie on response. For local development secure=False is fine.
-    resp = make_response(redirect(url_for('counter')))
+    # Set cookie on response. Instead of redirecting (full window), return the popup template
+    resp = make_response(render_template('auth_callback_popup.html'))
     resp.set_cookie(
         'auth',
         token_str,

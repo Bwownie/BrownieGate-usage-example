@@ -1,0 +1,7 @@
+Flask>=2.2,<3
+python-dotenv>=1.0.0
+browniegate>=0.1.0
+eth-account>=0.6.0
+pyjwt>=2.6.0
+flask-cors>=3.0.10
+requests>=2.31.0

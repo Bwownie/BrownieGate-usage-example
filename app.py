@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, session, make_response, jsonify
-from browniegate import *   # brownieGate client library (developer-provided)
+from browniegate import *   # brownieGate client library
 import os
 from dotenv import load_dotenv
 import sqlite3
@@ -7,14 +7,13 @@ from pathlib import Path
 
 # Load local development environment variables from creds.env
 # See creds.env.example in the repo for required variables and example values.
-load_dotenv(dotenv_path="test_creds.env")
+load_dotenv(dotenv_path="creds.env")
 
 # Configuration from environment (developers should set these in creds.env)
 PROJECT_UUID = os.getenv('PROJECT_UUID', '')
 API_KEY = os.getenv('API_KEY', '')
 ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY', '')
-# Make the BrownieGate URL configurable for local testing
-BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'http://192.168.1.119:5000')
+BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'http://10.8.0.3:5001')
 
 # App secret key for Flask sessions (do NOT commit real secrets)
 FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
@@ -303,4 +302,4 @@ def health():
 
 if __name__ == "__main__":
     # Local development: debug True is convenient. Don't use debug=True on public servers.
-    app.run(debug=True, host="site.localhost", port=5000)
+    app.run(debug=True, host="localhost", port=5000)

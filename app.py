@@ -13,7 +13,7 @@ load_dotenv(dotenv_path="creds.env")
 PROJECT_UUID = os.getenv('PROJECT_UUID', '')
 API_KEY = os.getenv('API_KEY', '')
 ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY', '')
-BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'http://10.8.0.3:5001')
+BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'https://www.browniegate.xyz/')
 
 # App secret key for Flask sessions (do NOT commit real secrets)
 FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
@@ -52,7 +52,7 @@ def ensure_db():
 ensure_db()
 
 # Initialize the BrownieGate client wrapper for example usage
-gate = brownieGate(api_key=API_KEY, project_uuid=PROJECT_UUID, encryption_key=ENCRYPTION_KEY, url=BROWNIE_GATE_URL, debug=True)
+gate = brownieClient(api_key=API_KEY, project_uuid=PROJECT_UUID, encryption_key=ENCRYPTION_KEY, url=BROWNIE_GATE_URL, debug=True)
 
 # ---------- Helper functions (small, easy-to-follow) ----------
 
@@ -302,4 +302,4 @@ def health():
 
 if __name__ == "__main__":
     # Local development: debug True is convenient. Don't use debug=True on public servers.
-    app.run(debug=True, host="localhost", port=5000)
+    app.run(debug=True, host="0.0.0.0", port=5000)

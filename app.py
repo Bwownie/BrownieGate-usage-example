@@ -13,7 +13,7 @@ load_dotenv(dotenv_path="creds.env")
 PROJECT_UUID = os.getenv('PROJECT_UUID', '')
 API_KEY = os.getenv('API_KEY', '')
 ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY', '')
-BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'https://www.browniegate.xyz/')
+BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'http://192.168.1.119:5001')
 
 # App secret key for Flask sessions (do NOT commit real secrets)
 FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
@@ -184,7 +184,7 @@ def callback():
         httponly=True,          # prevents JavaScript from reading the cookie (recommended)
         samesite=COOKIE_SAMESITE
     )
-
+    
     # Ensure an example row exists for this user and set up session
     setup_user_in_database(user_id)
     setup_user_session(user_id)

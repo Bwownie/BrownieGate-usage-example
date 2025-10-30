@@ -42,7 +42,7 @@
 						window.location.reload();
 					}
 				} catch (err) {
-					// ignore and continue
+					console.log(err)
 				}
 			}
 

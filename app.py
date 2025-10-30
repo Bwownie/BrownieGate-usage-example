@@ -52,7 +52,7 @@ def ensure_db():
 ensure_db()
 
 # Initialize the BrownieGate client wrapper for example usage
-gate = brownieClient(api_key=API_KEY, project_uuid=PROJECT_UUID, encryption_key=ENCRYPTION_KEY, url=BROWNIE_GATE_URL, debug=True)
+gate = BrownieClient(api_key=API_KEY, project_uuid=PROJECT_UUID, encryption_key=ENCRYPTION_KEY, url=BROWNIE_GATE_URL, debug=True)
 
 # ---------- Helper functions (small, easy-to-follow) ----------
 

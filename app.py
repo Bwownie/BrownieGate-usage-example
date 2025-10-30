@@ -7,13 +7,13 @@ from pathlib import Path
 
 # Load local development environment variables from creds.env
 # See creds.env.example in the repo for required variables and example values.
-load_dotenv(dotenv_path="creds.env")
+load_dotenv(dotenv_path=".env")
 
 # Configuration from environment (developers should set these in creds.env)
 PROJECT_UUID = os.getenv('PROJECT_UUID', '')
 API_KEY = os.getenv('API_KEY', '')
 ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY', '')
-BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'http://192.168.1.119:5001')
+BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'https://www.browniegate.xyz/')
 
 # App secret key for Flask sessions (do NOT commit real secrets)
 FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')

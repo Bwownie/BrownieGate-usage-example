@@ -1,4 +1,4 @@
-#🍫 BrownieGate — Usage Example
+# 🍫 BrownieGate — Usage Example
 
 A compact, local developer example showing how to integrate a web application with the hosted BrownieGate SSO/auth gateway (https://browniegate.xyz).  
 BrownieGate is a hosted service — you do not run the BrownieGate production service locally. When you register a project on BrownieGate you will be issued the credentials required to integrate your app.

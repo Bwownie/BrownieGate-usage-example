@@ -122,8 +122,6 @@ python -c "import secrets; print(secrets.token_hex(32))"
 
 - This example focuses on clarity. If you plan to integrate BrownieGate in production, follow security best practices:
   - Use TLS (HTTPS) and set `COOKIE_SECURE=1`
-  - Use a secure secret manager for keys
-  - Use Argon2 for password storage (if you manage passwords locally)
   - Implement rate limiting, PKCE and OAuth2/OIDC flows according to your client needs
 - The example uses SQLite for simplicity. Production services should use a managed DB.
 - BrownieGate provides the Fernet `ENCRYPTION_KEY` for your project; do not invent or substitute your own for production use unless explicitly instructed by the BrownieGate dashboard/docs.

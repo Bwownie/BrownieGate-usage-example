@@ -51,15 +51,12 @@ pip install -r requirements.txt
 
 3. Copy the example credentials and fill values
 ```bash
-cp creds.env.example creds.env
+cp .env.example .env
 ```
 Edit `creds.env` and paste in the credentials provided by BrownieGate (when you created your project at https://browniegate.xyz):
 - `PROJECT_UUID` — provided by BrownieGate
 - `API_KEY` — provided by BrownieGate
 - `ENCRYPTION_KEY` — provided by BrownieGate (Fernet 32-byte url-safe base64) — BrownieGate supplies this when you create your project
-- `FLASK_SECRET_KEY` — local Flask session secret (generate locally)
-- `COOKIE_SECURE` / `SESSION_COOKIE_SECURE` — `0` for local HTTP, `1` for HTTPS
-- `COOKIE_SAMESITE` — `Lax` is recommended
 
 > Important: do NOT commit your `creds.env` to source control.
 

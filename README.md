@@ -76,16 +76,6 @@ python app.py
 | PROJECT_UUID        | UUID for your BrownieGate project (from browniegate.xyz) |
 | API_KEY             | API key for your project (from browniegate.xyz) |
 | ENCRYPTION_KEY      | Fernet key used for payload encryption (provided by BrownieGate) |
-| FLASK_SECRET_KEY    | Flask session signing secret (generate locally) |
-| COOKIE_SECURE       | 0 or 1 (0 = local HTTP; 1 = HTTPS) |
-| COOKIE_SAMESITE     | SameSite value for cookies (e.g., `Lax`) |
-| SESSION_COOKIE_SECURE | 0 or 1 |
-
-How to generate keys locally:
-- Flask secret:
-```bash
-python -c "import secrets; print(secrets.token_hex(32))"
-```
 
 ---
 
@@ -109,8 +99,8 @@ python -c "import secrets; print(secrets.token_hex(32))"
 
 ## Troubleshooting
 
-- **Invalid payload** during callback: ensure `ENCRYPTION_KEY` in `creds.env` matches the key shown on your BrownieGate project page.
-- **Stuck on /login** after callback: check the browser has an `auth` cookie and that `FLASK_SECRET_KEY` is set in `creds.env`.
+- **Invalid payload** during callback: ensure `ENCRYPTION_KEY` in `.env` matches the key shown on your BrownieGate project page.
+- **Stuck on /login** after callback: check the browser has an `auth` cookie.
 - **API calls time out**: verify `browniegate.xyz` is reachable and your `PROJECT_UUID` and `API_KEY` are correct.
 
 ---
@@ -130,7 +120,7 @@ python -c "import secrets; print(secrets.token_hex(32))"
 - `app.py` — Flask example application
 - `templates/` — login and counter templates
 - `static/` — CSS, JS, and resources
-- `creds.env.example` — template (copy to `creds.env` and fill)
+- `.env.example` — template (copy to `.env` and fill)
 
 ---
 

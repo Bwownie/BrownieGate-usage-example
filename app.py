@@ -13,7 +13,7 @@ load_dotenv(dotenv_path=".env")
 PROJECT_UUID = os.getenv('PROJECT_UUID', '')
 API_KEY = os.getenv('API_KEY', '')
 ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY', '')
-BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'http://site.localhost:5001')
+BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'http://www.browniegate.xyz')
 
 # App secret key for Flask sessions (do NOT commit real secrets)
 FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')

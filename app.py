@@ -290,7 +290,7 @@ def logout():
 
 @app.route("/delete_account")
 def delete_account():
-
+    user_id = None
     # If the session already has the user, render immediately
     if not session.get('user_id'):
         token = request.cookies.get('auth')
@@ -312,10 +312,15 @@ def delete_account():
         except Exception:
             # If the Gate API is unreachable treat as unauthenticated in this demo
             return redirect(url_for('login'))
-
-        if gate.remove_user(user_id):
-            delete_user(user_id)
-            session.clear()
+    
+    if not user_id:
+        user_id = session.get('user_id')
+        
+    removed = gate.remove_user(user_id)
+    print(removed)
+    if removed:
+        delete_user(user_id)
+        session.clear()
 
     return redirect(url_for('login'))
 

@@ -1,4 +1,4 @@
-# BrownieGate — Usage Example
+# 🍫 BrownieGate — Usage Example
 
 A compact, local developer example showing how to integrate a web application with the hosted BrownieGate SSO/auth gateway (https://browniegate.xyz).  
 BrownieGate is a hosted service — you do not run the BrownieGate production service locally. When you register a project on BrownieGate you will be issued the credentials required to integrate your app.
@@ -51,15 +51,12 @@ pip install -r requirements.txt
 
 3. Copy the example credentials and fill values
 ```bash
-cp creds.env.example creds.env
+cp .env.example .env
 ```
 Edit `creds.env` and paste in the credentials provided by BrownieGate (when you created your project at https://browniegate.xyz):
 - `PROJECT_UUID` — provided by BrownieGate
 - `API_KEY` — provided by BrownieGate
 - `ENCRYPTION_KEY` — provided by BrownieGate (Fernet 32-byte url-safe base64) — BrownieGate supplies this when you create your project
-- `FLASK_SECRET_KEY` — local Flask session secret (generate locally)
-- `COOKIE_SECURE` / `SESSION_COOKIE_SECURE` — `0` for local HTTP, `1` for HTTPS
-- `COOKIE_SAMESITE` — `Lax` is recommended
 
 > Important: do NOT commit your `creds.env` to source control.
 
@@ -79,16 +76,6 @@ python app.py
 | PROJECT_UUID        | UUID for your BrownieGate project (from browniegate.xyz) |
 | API_KEY             | API key for your project (from browniegate.xyz) |
 | ENCRYPTION_KEY      | Fernet key used for payload encryption (provided by BrownieGate) |
-| FLASK_SECRET_KEY    | Flask session signing secret (generate locally) |
-| COOKIE_SECURE       | 0 or 1 (0 = local HTTP; 1 = HTTPS) |
-| COOKIE_SAMESITE     | SameSite value for cookies (e.g., `Lax`) |
-| SESSION_COOKIE_SECURE | 0 or 1 |
-
-How to generate keys locally:
-- Flask secret:
-```bash
-python -c "import secrets; print(secrets.token_hex(32))"
-```
 
 ---
 
@@ -112,8 +99,8 @@ python -c "import secrets; print(secrets.token_hex(32))"
 
 ## Troubleshooting
 
-- **Invalid payload** during callback: ensure `ENCRYPTION_KEY` in `creds.env` matches the key shown on your BrownieGate project page.
-- **Stuck on /login** after callback: check the browser has an `auth` cookie and that `FLASK_SECRET_KEY` is set in `creds.env`.
+- **Invalid payload** during callback: ensure `ENCRYPTION_KEY` in `.env` matches the key shown on your BrownieGate project page.
+- **Stuck on /login** after callback: check the browser has an `auth` cookie.
 - **API calls time out**: verify `browniegate.xyz` is reachable and your `PROJECT_UUID` and `API_KEY` are correct.
 
 ---
@@ -122,8 +109,6 @@ python -c "import secrets; print(secrets.token_hex(32))"
 
 - This example focuses on clarity. If you plan to integrate BrownieGate in production, follow security best practices:
   - Use TLS (HTTPS) and set `COOKIE_SECURE=1`
-  - Use a secure secret manager for keys
-  - Use Argon2 for password storage (if you manage passwords locally)
   - Implement rate limiting, PKCE and OAuth2/OIDC flows according to your client needs
 - The example uses SQLite for simplicity. Production services should use a managed DB.
 - BrownieGate provides the Fernet `ENCRYPTION_KEY` for your project; do not invent or substitute your own for production use unless explicitly instructed by the BrownieGate dashboard/docs.
@@ -135,7 +120,7 @@ python -c "import secrets; print(secrets.token_hex(32))"
 - `app.py` — Flask example application
 - `templates/` — login and counter templates
 - `static/` — CSS, JS, and resources
-- `creds.env.example` — template (copy to `creds.env` and fill)
+- `.env.example` — template (copy to `.env` and fill)
 
 ---
 

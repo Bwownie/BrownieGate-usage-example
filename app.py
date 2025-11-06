@@ -13,7 +13,7 @@ load_dotenv(dotenv_path=".env")
 PROJECT_UUID = os.getenv('PROJECT_UUID', '')
 API_KEY = os.getenv('API_KEY', '')
 ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY', '')
-BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'http://www.browniegate.xyz')
+BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'https://www.browniegate.xyz')
 
 # App secret key for Flask sessions (do NOT commit real secrets)
 FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
@@ -172,7 +172,7 @@ def callback():
     try:
         # decrypt + verify
         success, user_id = gate.verify_payload(gate.decrypt_payload(payload))
-    except Exception:
+    except Exception as e:
         # In a local example it's helpful to show a simple error; in real apps log this server-side.
         return "Invalid payload or verification error", 400
 

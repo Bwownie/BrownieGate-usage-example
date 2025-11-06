@@ -13,7 +13,7 @@ load_dotenv(dotenv_path=".env")
 PROJECT_UUID = os.getenv('PROJECT_UUID', '')
 API_KEY = os.getenv('API_KEY', '')
 ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY', '')
-BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'https://www.browniegate.xyz/')
+BROWNIE_GATE_URL = os.getenv('BROWNIE_GATE_URL', 'http://site.localhost:5001')
 
 # App secret key for Flask sessions (do NOT commit real secrets)
 FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
@@ -92,6 +92,15 @@ def get_user_score(user_id: str):
             session['score'] = result[0]
         else:
             session['score'] = 0
+            
+def delete_user(user_id: str):
+    try:
+        with sqlite3.connect(DB_PATH) as conn:
+            cur = conn.cursor()
+            cur.execute("DELETE FROM data WHERE user_id = ?", (user_id,))
+            conn.commit()
+    except:
+        pass
 
 # ---------- Routes (login flow + small protected example) ----------
 
@@ -278,6 +287,37 @@ def logout():
     resp = make_response(redirect(url_for('login')))
     resp.delete_cookie('auth')
     return resp
+
+@app.route("/delete_account")
+def delete_account():
+
+    # If the session already has the user, render immediately
+    if not session.get('user_id'):
+        token = request.cookies.get('auth')
+        if not token:
+            # No auth cookie -> redirect to login
+            return redirect(url_for('login'))
+
+        try:
+            # decrypt_cookie returns (user_id, cookie_hash)
+            user_id, cookie_hash = gate.decrypt_cookie(token)
+        except Exception:
+            # Decrypt failed -> treat as unauthenticated
+            return redirect(url_for('login'))
+
+        # Validate cookie with BrownieGate backend
+        try:
+            if not gate.validate_cookie(user_id, cookie_hash):
+                return redirect(url_for('login'))
+        except Exception:
+            # If the Gate API is unreachable treat as unauthenticated in this demo
+            return redirect(url_for('login'))
+
+        if gate.remove_user(user_id):
+            delete_user(user_id)
+            session.clear()
+
+    return redirect(url_for('login'))
 
 @app.route('/get_pfp/me')
 def get_pfp():

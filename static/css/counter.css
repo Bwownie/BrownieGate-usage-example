@@ -63,3 +63,9 @@ img {
   width: 145px;
   height: 145px;
 }
+
+#remove-acc {
+  color: white;
+  background-color: red;
+  margin-top: 10px;
+}

@@ -321,6 +321,17 @@ def delete_account():
     if removed:
         delete_user(user_id)
         session.clear()
+        
+    if request.cookies.get('auth'):
+        try:
+            gate.remove_cookie(user_id)
+        except Exception:
+            # Ignore removal errors for this local demo
+            pass
+        
+        resp = make_response(redirect(url_for('login')))
+        resp.delete_cookie('auth')
+        return resp
 
     return redirect(url_for('login'))
 
